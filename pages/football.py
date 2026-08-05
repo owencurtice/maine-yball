@@ -5,7 +5,7 @@ from models.mpi import calculate_mpi
 
 from utils.components import ranking_card
 from utils.charts import mpi_chart
-
+import altair as alt
 # ------------------------
 # Page Header
 # ------------------------
@@ -39,6 +39,19 @@ top_team = rankings.iloc[0]
 
 col1, col2, col3 = st.columns(3)
 
+def mpi_chart(df):
+    chart = (
+        alt.Chart(df)
+        .mark_bar(color="#C9A227")
+        .encode(
+            x=alt.X("MPI:Q", title="MPI"),
+            y=alt.Y("Team:N", sort="-x", title=None),
+            tooltip=["Team", "MPI"]
+        )
+        .properties(height=alt.Step(35))
+    )
+    st.altair_chart(chart, use_container_width=True)
+    
 with col1:
     st.metric(
         "Current #1",
