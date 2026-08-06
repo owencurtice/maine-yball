@@ -23,6 +23,5 @@ Maine-yball is a sports analytics platform built using Python and Streamlit to a
 - Strength of Schedule
 - Quality Wins
 - Game Predictions
-- MaxPreps integration
 - Machine Learning models
 - Weekly rankings
