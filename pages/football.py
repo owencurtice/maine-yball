@@ -2,10 +2,10 @@ import streamlit as st
 import pandas as pd
 
 from models.mpi import calculate_mpi
-
+from utils.stats import build_team_stats
 from utils.components import ranking_card
 from utils.charts import mpi_chart
-import altair as alt
+
 # ------------------------
 # Page Header
 # ------------------------
@@ -19,17 +19,21 @@ st.caption(
 st.divider()
 
 # ------------------------
-# Load Data
+# Build Rankings from games.csv
 # ------------------------
 
-df = pd.read_csv("data/football_stats.csv")
+from utils.data import load_games, load_teams
 
-df = calculate_mpi(df)
+teams = load_teams()
+games = load_games()
 
-rankings = df.sort_values(
-    "MPI",
-    ascending=False
-)
+stats = build_team_stats(games, teams)
+stats = calculate_mpi(stats)
+
+rankings = stats.merge(teams[["TeamID", "School"]], on="TeamID")
+rankings = rankings.rename(columns={"School": "Team"})
+rankings = rankings.sort_values("MPI", ascending=False).reset_index(drop=True)
+rankings["Rank"] = rankings.index + 1
 
 # ------------------------
 # Top Team
@@ -39,36 +43,14 @@ top_team = rankings.iloc[0]
 
 col1, col2, col3 = st.columns(3)
 
-def mpi_chart(df):
-    chart = (
-        alt.Chart(df)
-        .mark_bar(color="#C9A227")
-        .encode(
-            x=alt.X("MPI:Q", title="MPI"),
-            y=alt.Y("Team:N", sort="-x", title=None),
-            tooltip=["Team", "MPI"]
-        )
-        .properties(height=alt.Step(35))
-    )
-    st.altair_chart(chart, use_container_width=True)
-    
 with col1:
-    st.metric(
-        "Current #1",
-        top_team["Team"]
-    )
+    st.metric("Current #1", top_team["Team"])
 
 with col2:
-    st.metric(
-        "MPI",
-        round(top_team["MPI"], 1)
-    )
+    st.metric("MPI", round(top_team["MPI"], 1))
 
 with col3:
-    st.metric(
-        "Record",
-        f"{top_team['Wins']}-{top_team['Losses']}"
-    )
+    st.metric("Record", f"{int(top_team['Wins'])}-{int(top_team['Losses'])}")
 
 st.divider()
 
@@ -78,12 +60,7 @@ st.divider()
 
 st.header("Current Rankings")
 
-rankings = rankings.reset_index(drop=True)
-
-rankings["Rank"] = rankings.index + 1
-
 for _, team in rankings.iterrows():
-
     ranking_card(team)
 
 st.divider()

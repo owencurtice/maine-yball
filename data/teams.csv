@@ -1,29 +1,33 @@
-Team,Class,Region,Division,Abbreviation,Mascot,Logo
-Lewiston,A,North,A North,LEW,Blue Devils,lewiston.png
-Bangor,A,North,A North,BAN,Rams,bangor.png
-Edward Little,A,North,A North,EL,Red Eddies,edward_little.png
-Portland,A,North,A North,POR,Bulldogs,portland.png
-Deering,A,North,A North,DEE,Rams,deering.png
-Oxford Hills/Buckfield Coop,A,North,A North,OH,Bears,oxford_hills.png
-Windham,A,North,A North,WIN,Eagles,windham.png
-Scarborough,A,South,A South,SCA,Red Storm,scarborough.png
-Thornton Academy,A,South,A South,TA,Golden Trojans,thornton.png
-Sanford,A,South,A South,SAN,Spartans,sanford.png
-Bonny Eagle,A,South,A South,BE,Scots,bonny_eagle.png
-South Portland,A,South,A South,SP,Red Riots,south_portland.png
-Noble,A,South,A South,NOB,Knights,noble.png
-Massabesic,A,South,A South,MAS,Mustangs,massabesic.png
-Brunswick,B,North,B North,BRU,Dragons,brunswick.png
-Messalonskee,B,North,B North,MES,Eagles,messalonskee.png
-Skowhegan Area,B,North,B North,SKO,River Hawks,skowhegan.png
-Mt. Blue,B,North,B North,MTB,Cougars,mt_blue.png
-Fryeburg Academy,B,North,B North,FA,Raiders,fryeburg.png
-Cony HS,B,North,B North,CON,Rams,cony.png
-Lawrence,B,North,B North,LAW,Bulldogs,lawrence.png
-Gorham,B,South,B South,GOR,Rams,gorham.png
-Kennebunk,B,South,B South,KEN,Rams,kennebunk.png
-Westbrook,B,South,B South,WES,Blue Blazes,westbrook.png
-Falmouth,B,South,B South,FAL,Navigators,falmouth.png
-Biddeford,B,South,B South,BID,Tigers,biddeford.png
-Marshwood,B,South,B South,MAR,Hawks,marshwood.png
-Cheverus/Waynflete Coop,B,South,B South,CHE,Stags,cheverus.png
+TeamID,School,Class,Region,Division,Mascot,PrimaryColor,SecondaryColor,Logo
+BAN,Bangor,A,North,A North,Blue Devils,#003DA5,#FFFFFF,bangor.png
+DEE,Deering,A,North,A North,Rams,#7A0019,#FFFFFF,deering.png
+EDL,Edward Little,A,North,A North,Red Eddies,#C8102E,#000000,edward_little.png
+LEW,Lewiston,A,North,A North,Bulldogs,#5B2C83,#FFFFFF,lewiston.webp
+OXF,Oxford Hills,A,North,A North,Vikings,#006747,#FFFFFF,oxford_hills.webp
+POR,Portland,A,North,A North,Eagles,#006341,#D4AF37,portland.png
+WIN,Windham,A,North,A North,Eagles,#0057B8,#FFFFFF,windham.png
+
+BON,Bonny Eagle,A,South,A South,Scots,#0B3A6E,#FFFFFF,bonny_eagle.webp
+MAS,Massabesic,A,South,A South,Mustangs,#006341,#FFD100,massabesic.png
+NOB,Noble,A,South,A South,Knights,#003DA5,#FFD100,noble.webp
+SAN,Sanford,A,South,A South,Spartans,#7A0019,#FFFFFF,sanford.jpg
+SCA,Scarborough,A,South,A South,Red Storm,#C8102E,#000000,scarborough.webp
+SOP,South Portland,A,South,A South,Red Riots,#C8102E,#FFFFFF,south_portland.png
+THO,Thornton Academy,A,South,A South,Golden Trojans,#000000,#D4AF37,thornton.jpeg
+
+BRU,Brunswick,B,North,B North,Dragons,#FFD100,#000000,brunswick.png
+CAM,Camden Hills,B,North,B North,Windjammers,#CC0000,#FFFFFF,camden_hills.jpg
+CON,Cony,B,North,B North,Rams,#7A0019,#FFFFFF,cony.png
+FRY,Fryeburg Academy,B,North,B North,Raiders,#004B8D,#FFFFFF,fryeburg.png
+LAW,Lawrence,B,North,B North,Bulldogs,#003DA5,#FFFFFF,lawrence.png
+MES,Messalonskee,B,North,B North,Eagles,#0057B8,#FFFFFF,messalonskee.jpg
+MTB,Mt. Blue,B,North,B North,Cougars,#003DA5,#FFFFFF,mt_blue.jpeg
+SKO,Skowhegan,B,North,B North,River Hawks,#6F2C91,#FFFFFF,skowhegan.png
+
+BID,Biddeford,B,South,B South,Tigers,#F47C20,#000000,biddeford.png
+CHE,Cheverus,B,South,B South,Stags,#8B0000,#FFFFFF,cheverus.png
+FAL,Falmouth,B,South,B South,Navigators,#003594,#66CCFF,falmouth.jpeg
+GOR,Gorham,B,South,B South,Rams,#003594,#FFFFFF,gorham.png
+KEN,Kennebunk,B,South,B South,Rams,#800020,#FFFFFF,kennebunk.png
+MAR,Marshwood,B,South,B South,Hawks,#006341,#FFFFFF,marshwood.webp
+WES,Westbrook,B,South,B South,Blue Blazes,#0057B8,#FFFFFF,westbrook.png

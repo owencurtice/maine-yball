@@ -1,90 +1,163 @@
 /* ===========================
    MAINE-YBALL DESIGN SYSTEM
+   Colors pulled directly from logo
 =========================== */
+
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;600;700;900&family=Inter:wght@400;500;600&family=Roboto+Mono:wght@500;700&display=swap');
+
+:root {
+    --bg-dark: #1C2D2C;
+    --bg-card: #263B39;
+    --accent-green: #79983F;
+    --accent-green-hover: #8BAE48;
+    --text-taupe: #A28F81;
+    --text-white: #F2F1EC;
+    --text-gray: #C9C7C2;
+}
+
+/* ---------- Base ---------- */
+
+html, body, [class*="css"], [data-testid="stAppViewContainer"] {
+    background-color: var(--bg-dark);
+    font-family: 'Inter', sans-serif;
+}
 
 /* ---------- Typography ---------- */
 
-html, body, [class*="css"]{
-    font-family:"Times New Roman", serif;
+h1 {
+    font-family: 'League Spartan', sans-serif;
+    color: var(--text-white);
+    font-size: 56px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
-h1{
-    color:#F5F4EF;
-    font-size:60px;
-    font-weight:bold;
-    letter-spacing:2px;
+h2 {
+    font-family: 'League Spartan', sans-serif;
+    color: var(--text-white);
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
 }
 
-h2{
-    color:#F5F4EF;
-    font-size:34px;
+h3 {
+    font-family: 'League Spartan', sans-serif;
+    color: var(--accent-green);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
 }
 
-h3{
-    color:#E0DDD6;
-    font-size:24px;
+p {
+    font-family: 'Inter', sans-serif;
+    color: var(--text-gray);
+    line-height: 1.7;
+    font-size: 17px;
 }
 
-p{
-    color:#D9D9D9;
-    line-height:1.8;
-    font-size:18px;
+/* Caption / subtext style, matching the light wide-tracked logo text */
+[data-testid="stCaptionContainer"], .stCaption {
+    font-family: 'League Spartan', sans-serif;
+    color: var(--text-taupe) !important;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 15px !important;
 }
 
 /* ---------- Sidebar ---------- */
 
-section[data-testid="stSidebar"]{
-    background:#10201D;
-    border-right:1px solid rgba(255,255,255,.08);
+section[data-testid="stSidebar"] {
+    background: #16211F;
+    border-right: 1px solid rgba(255,255,255,.08);
 }
 
-section[data-testid="stSidebar"] *{
-    color:white;
+section[data-testid="stSidebar"] * {
+    color: var(--text-white);
+    font-family: 'Inter', sans-serif;
 }
 
 /* ---------- Cards ---------- */
 
-.card{
-    background:#182827;
-    border-radius:15px;
-    padding:25px;
-    border:1px solid rgba(255,255,255,.08);
-    margin-bottom:20px;
+.card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 25px;
+    border: 1px solid rgba(255,255,255,.06);
+    margin-bottom: 20px;
+    transition: border-color 0.2s ease;
+}
+
+.card:hover {
+    border-color: var(--accent-green);
 }
 
 /* ---------- Ranking Number ---------- */
 
-.rank{
-
-    font-size:42px;
-    font-weight:bold;
-    color:white;
+.rank {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--accent-green);
 }
 
 /* ---------- Team Name ---------- */
 
-.team{
+.team {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-white);
+    text-transform: uppercase;
+}
 
-    font-size:24px;
-    font-weight:bold;
-    color:white;
+/* ---------- Buttons ---------- */
+
+.stButton button {
+    background-color: var(--accent-green);
+    color: var(--bg-dark);
+    font-family: 'League Spartan', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 8px;
+}
+
+.stButton button:hover {
+    background-color: var(--accent-green-hover);
+    color: var(--bg-dark);
+}
+
+/* ---------- Metrics ---------- */
+
+[data-testid="stMetricValue"] {
+    font-family: 'Roboto Mono', monospace;
+    color: var(--accent-green);
+}
+
+[data-testid="stMetricLabel"] {
+    font-family: 'League Spartan', sans-serif;
+    color: var(--text-taupe);
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 /* ---------- Divider ---------- */
 
-hr{
-
-    border:.5px solid rgba(255,255,255,.08);
+hr {
+    border: 0.5px solid rgba(255,255,255,.08);
 }
 
 /* ---------- Tables ---------- */
 
-thead tr th{
-
-    background:#183330;
+thead tr th {
+    background: var(--bg-card);
+    color: var(--text-white);
+    font-family: 'League Spartan', sans-serif;
 }
 
-tbody{
-
-    color:white;
+tbody {
+    color: var(--text-gray);
 }

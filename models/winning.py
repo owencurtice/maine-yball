@@ -1,21 +1,6 @@
+import numpy as np
+
 def winning_percentage(df):
-
-    df["Winning_Percentage"] = (
-
-        df["Wins"]
-
-        /
-
-        (
-
-            df["Wins"]
-
-            +
-
-            df["Losses"]
-
-        )
-
-    )
-
+    games = df["Wins"] + df["Losses"]
+    df["Winning_Percentage"] = np.where(games > 0, df["Wins"] / games, 0.0)
     return df
