@@ -86,3 +86,33 @@ def generate_movers_graphic(movers, title="BIGGEST MOVERS"):
     draw.text((60, H - 60), "MAINE-YBALL.COM", font=footer_font, fill=TEXT_TAUPE)
 
     return img
+
+import textwrap
+
+def generate_quote_graphic(headline, subtext=""):
+    W, H = 1080, 1080
+    img = Image.new("RGB", (W, H), BG_DARK)
+    draw = ImageDraw.Draw(img)
+
+    label_font = ImageFont.truetype(FONT_HEADLINE, 28)
+    headline_font = ImageFont.truetype(FONT_HEADLINE, 56)
+    sub_font = ImageFont.truetype(FONT_MONO, 26)
+    footer_font = ImageFont.truetype(FONT_HEADLINE, 22)
+
+    draw.text((60, 60), "MAINE-YBALL", font=label_font, fill=ACCENT_GREEN)
+
+    wrapped = textwrap.wrap(headline, width=22)
+    y = 300
+    for line in wrapped:
+        draw.text((60, y), line.upper(), font=headline_font, fill=TEXT_WHITE)
+        y += 68
+
+    if subtext:
+        y += 30
+        wrapped_sub = textwrap.wrap(subtext, width=48)
+        for line in wrapped_sub:
+            draw.text((60, y), line, font=sub_font, fill=TEXT_TAUPE)
+            y += 38
+
+    draw.text((60, H - 60), "MAINE-YBALL.COM", font=footer_font, fill=TEXT_TAUPE)
+    return img

@@ -28,7 +28,16 @@ of schedule, point differential, and offensive/defensive efficiency to provide a
 of team performance.
 """
 )
-
+st.divider()
+st.subheader("The Formula")
+st.code("""
+MPI = (Winning % × 0.40)
+    + (Strength of Schedule × 0.30)
+    + (Offensive Rating × 0.15)
+    + (Defensive Rating × 0.15)
+    × 100
+""")
+st.caption("Each component is normalized to a 0–1 scale before weighting, so no single factor accidentally dominates the score.")
 st.divider()
 
 st.title("Rankings and Analysis updated every Sunday!")

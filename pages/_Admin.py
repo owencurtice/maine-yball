@@ -156,3 +156,16 @@ with tab4:
                 "Download for Instagram", data=buf.getvalue(),
                 file_name="maineyball_movers.png", mime="image/png"
             )
+
+with tab5:  # add tab5 to your st.tabs(...) list, and import generate_quote_graphic
+    st.subheader("Custom Text Graphic")
+    headline = st.text_area("Headline", max_chars=100)
+    subtext = st.text_area("Subtext (optional)", max_chars=250)
+
+    if st.button("Generate Custom Graphic"):
+        img = generate_quote_graphic(headline, subtext)
+        buf = BytesIO()
+        img.save(buf, format="PNG")
+        st.image(img)
+        st.download_button("Download for Instagram", data=buf.getvalue(),
+                            file_name="maineyball_post.png", mime="image/png")

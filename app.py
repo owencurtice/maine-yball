@@ -58,7 +58,7 @@ with col2:
     """)
 
 with col3:
-    st.subheader("Notebook")
+    st.subheader("Weekly Digest")
     st.write("""
     Observations, trends,
     and stories hidden inside
