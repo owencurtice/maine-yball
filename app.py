@@ -26,11 +26,6 @@ st.image(
 
 st.title("MAINE-YBALL")
 
-st.image(
-    "assets/featured.jpg",
-    use_container_width=True
-)
-
 st.caption(
     "Revealing the true stories of Maine sports, beyond the logos, narratives, and noise."
 )
@@ -40,7 +35,7 @@ Maine-yball is an independent football analytics publication
 covering Maine Class A and Class B football.
 
 Our goal is simple:
-Use data—not reputation—to explain what is happening every Friday night.
+Use data, not reputation, to explain what is happening every Friday night.
 """)
 
 st.divider()
@@ -71,9 +66,12 @@ with col3:
     """)
 
 st.image(
-    "assets/background.jpg",
+    "assets/featured.jpg",
     use_container_width=True
 )
+st.caption("""
+Photo Credit: Insert Name; Insert Caption
+""")
 
 st.divider()
 
