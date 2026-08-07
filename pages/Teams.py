@@ -4,6 +4,10 @@ import pandas as pd
 
 st.title("Teams")
 
+from utils.theme import inject_theme
+
+inject_theme()
+
 teams = pd.read_csv("data/teams.csv")
 
 division = st.selectbox(

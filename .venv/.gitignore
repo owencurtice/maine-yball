@@ -15,4 +15,4 @@ __pycache__/
 .streamlit/
 
 # Jupyter
-.ipynb_checkpoints/
+.ipynb_checkpoints/stre

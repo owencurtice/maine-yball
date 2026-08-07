@@ -1,6 +1,8 @@
 import streamlit as st
+from utils.theme import inject_theme
+inject_theme()
 
-st.title("🏒 Hockey Intelligence Center")
+st.title("Hockey")
 
 st.write(
 """

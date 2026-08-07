@@ -8,8 +8,8 @@
 :root {
     --bg-dark: #1C2D2C;
     --bg-card: #263B39;
-    --accent-green: #79983F;
-    --accent-green-hover: #8BAE48;
+    --accent-green: #2E6F40;
+    --accent-green-hover: #0A6A47;
     --text-taupe: #A28F81;
     --text-white: #F2F1EC;
     --text-gray: #C9C7C2;
@@ -124,11 +124,14 @@ section[data-testid="stSidebar"] * {
     border: none;
     border-radius: 8px;
 }
+.stButton button {
+    background-color: #06402B;
+}
 
 .stButton button:hover {
-    background-color: var(--accent-green-hover);
-    color: var(--bg-dark);
+    background-color: #0A6A47;
 }
+
 
 /* ---------- Metrics ---------- */
 

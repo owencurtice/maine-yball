@@ -1,10 +1,9 @@
 import streamlit as st
-import pandas as pd
 
 from utils.theme import inject_theme
 from utils.data import load_games, load_teams
-from models.mpi import calculate_mpi
-from utils.stats import build_team_stats
+from utils.rankings import get_rankings
+from utils.components import mpi_scorecard
 
 inject_theme()
 
@@ -25,9 +24,8 @@ st.caption(f"{team['Mascot']} — {team['Class']} {team['Region']} ({team['Divis
 
 st.divider()
 
-stats = build_team_stats(games, teams)
-stats = calculate_mpi(stats)
-row = stats[stats["TeamID"] == team_id].iloc[0]
+rankings, season_started = get_rankings(games, teams)
+row = rankings[rankings["TeamID"] == team_id].iloc[0]
 
 col1, col2, col3 = st.columns(3)
 with col1:
@@ -35,7 +33,16 @@ with col1:
 with col2:
     st.metric("MPI", round(row["MPI"], 1))
 with col3:
-    st.metric("Games Played", int(row["Wins"] + row["Losses"]))
+    st.metric("Rank", f"#{int(row['Rank'])}")
+
+st.divider()
+
+if season_started:
+    st.subheader("MPI Scorecard")
+    st.caption("Full transparency on how this team's ranking is calculated.")
+    mpi_scorecard(row)
+else:
+    st.info("The full MPI breakdown becomes available once Week 1 results are in. Right now this team's score reflects last year's playoff finish.")
 
 st.divider()
 st.subheader("Schedule")

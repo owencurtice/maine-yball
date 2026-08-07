@@ -9,6 +9,10 @@ from utils.data import load_games, load_teams
 from models.mpi import calculate_mpi
 from utils.stats import build_team_stats
 from utils.graphics import generate_ranking_graphic
+from utils.rankings import get_rankings
+from utils.history import save_snapshot
+from utils.history import get_movers
+from utils.graphics import generate_movers_graphic
 
 inject_theme()
 
@@ -22,7 +26,7 @@ games_path = "data/games.csv"
 
 team_options = dict(zip(teams["School"], teams["TeamID"]))
 
-tab1, tab2, tab3 = st.tabs(["Add Games", "Enter Scores", "Graphics"])
+tab1, tab2, tab3, tab4 = st.tabs(["Add Games", "Enter Scores", "Graphics", "Movers Graphic"])
 
 # ------------------------
 # TAB 1: Add Games
@@ -97,6 +101,9 @@ with tab2:
                 games.at[idx, "AwayScore"] = away_score
                 games.at[idx, "Status"] = "Final"
                 games.to_csv(games_path, index=False)
+                week_saved = int(games.at[idx, "Week"])
+                updated_rankings, _ = get_rankings(games, teams)
+                save_snapshot(week_saved, updated_rankings)
                 st.success(f"Saved: {labels[selected_id]} — {home_score}-{away_score}")
 
 # ------------------------
@@ -105,29 +112,47 @@ with tab2:
 with tab3:
     st.subheader("Generate Weekly Graphic")
 
-    stats = build_team_stats(games, teams)
-    stats = calculate_mpi(stats)
-    rankings = stats.merge(teams[["TeamID", "School", "Class"]], on="TeamID")
-    rankings = rankings.rename(columns={"School": "Team"})
+    rankings, season_started = get_rankings(games, teams)
+
+    if not season_started:
+        st.caption("Using Preseason Power Rankings — live MPI begins after Week 1.")
 
     class_filter = st.selectbox("Class", ["All", "A", "B"])
 
-    if class_filter != "All":
-        rankings = rankings[rankings["Class"] == class_filter]
-
-    rankings = rankings.sort_values("MPI", ascending=False).reset_index(drop=True)
-    rankings["Rank"] = rankings.index + 1
+    display_rankings = rankings if class_filter == "All" else rankings[rankings["Class"] == class_filter]
+    display_rankings = display_rankings.sort_values("MPI", ascending=False).reset_index(drop=True)
+    display_rankings["Rank"] = display_rankings.index + 1
 
     subtitle = f"Class {class_filter}" if class_filter != "All" else ""
+    title = "Preseason Rankings" if not season_started else "Weekly Rankings"
 
     if st.button("Generate Graphic"):
-        img = generate_ranking_graphic(rankings, title="Weekly Rankings", subtitle=subtitle)
-
+        img = generate_ranking_graphic(display_rankings, title=title, subtitle=subtitle)
         buf = BytesIO()
         img.save(buf, format="PNG")
-
         st.image(img)
         st.download_button(
             "Download for Instagram", data=buf.getvalue(),
             file_name="maineyball_rankings.png", mime="image/png"
         )
+
+with tab4:
+    st.subheader("Generate Movers Graphic")
+
+    movers = get_movers(games, teams)
+
+    if movers is None:
+        st.info("Movers graphic becomes available once Week 1 scores are entered.")
+    else:
+        st.caption(f"Change since {movers['baseline_label']}")
+
+        if st.button("Generate Movers Graphic"):
+            img = generate_movers_graphic(movers)
+            buf = BytesIO()
+            img.save(buf, format="PNG")
+
+            st.image(img)
+            st.download_button(
+                "Download for Instagram", data=buf.getvalue(),
+                file_name="maineyball_movers.png", mime="image/png"
+            )

@@ -1,4 +1,7 @@
 import streamlit as st
+from utils.theme import inject_theme
+
+inject_theme()
 
 st.title("About Maine-yball")
 
