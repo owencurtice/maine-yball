@@ -68,16 +68,6 @@ with col3:
     We use Elo to predict the outcome of future games.
     """)
 
-st.image(
-    "assets/featured.jpg",
-    width="stretch"
-)
-
-st.caption("""
-Photo Credit: Insert Name; Insert Caption
-""")
-
-st.divider()
 
 from utils.digest import load_digest, latest_entry
 

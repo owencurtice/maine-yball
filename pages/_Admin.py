@@ -13,6 +13,7 @@ from utils.rankings import get_rankings
 from utils.history import save_snapshot
 from utils.history import get_movers
 from utils.graphics import generate_movers_graphic
+from utils.graphics import generate_quote_graphic
 
 inject_theme()
 
@@ -26,7 +27,7 @@ games_path = "data/games.csv"
 
 team_options = dict(zip(teams["School"], teams["TeamID"]))
 
-tab1, tab2, tab3, tab4 = st.tabs(["Add Games", "Enter Scores", "Graphics", "Movers Graphic"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["Add Games", "Enter Scores", "Graphics", "Movers Graphic", "Custom Post"])
 
 # ------------------------
 # TAB 1: Add Games
