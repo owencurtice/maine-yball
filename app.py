@@ -70,8 +70,9 @@ with col3:
 
 st.image(
     "assets/featured.jpg",
-    use_container_width=True
+    width="stretch"
 )
+
 st.caption("""
 Photo Credit: Insert Name; Insert Caption
 """)
