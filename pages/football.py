@@ -6,6 +6,7 @@ from utils.rankings import get_rankings
 from utils.components import ranking_card
 from utils.charts import mpi_chart
 from utils.history import get_movers
+from utils.elo import compute_elo_timeline
 
 inject_theme()
 
@@ -54,6 +55,22 @@ if movers:
         st.subheader("Fallers")
         for _, row in movers["fallers"].iterrows():
             mover_card(row["Team"], row["Delta"], row["MPI"])
+
+st.divider()
+st.header("Biggest Upsets")
+
+_, _, predictions = compute_elo_timeline(games, teams)
+upsets = predictions[(predictions["Status"] == "Final") & (predictions["Upset"] == True)]
+upsets = upsets.sort_values("EloDiff", ascending=False).head(5)
+
+if upsets.empty:
+    st.caption("No upsets yet this season.")
+else:
+    id_to_school = dict(zip(teams["TeamID"], teams["School"]))
+    for _, u in upsets.iterrows():
+        winner = u["HomeID"] if u["HomeScore"] > u["AwayScore"] else u["AwayID"]
+        loser = u["AwayID"] if winner == u["HomeID"] else u["HomeID"]
+        st.write(f"**{id_to_school.get(winner)}** upset **{id_to_school.get(loser)}** (Week {int(u['Week'])})")
 
 st.header("MPI Rankings")
 mpi_chart(rankings)

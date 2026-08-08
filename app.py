@@ -45,24 +45,26 @@ col1, col2, col3 = st.columns(3)
 with col1:
     st.subheader("Current Rankings")
     st.write("""
-    Week-by-week Maine-yball
-    Power Index rankings for
-    Class A & B football.
+    Week to week team rankings based on the Maine-yball Power Index (MPI), 
+    the metric allows us to evalute teams from class A and class B 
+    and North vs South on a level playing field.
     """)
 
 with col2:
-    st.subheader("Game of the Week")
+    st.subheader("MPI")
     st.write("""
-    Weekly matchup analysis,
-    predictions, and key metrics.
+    The Maine-yball Power Index (MPI)
+    is a comprehensive metric that evaluates Maine football teams based on
+    winning percentage, strength of schedule,
+    point differential, and offensive/defensive efficiency.
     """)
 
 with col3:
-    st.subheader("Weekly Digest")
+    st.subheader("Elo and Predictions")
     st.write("""
-    Observations, trends,
-    and stories hidden inside
-    the numbers.
+    Elo ratings is an iterative system that updates a teams rating after every 
+    game based on the result and the margin of victory, factoring in the opponents rating. 
+    We use Elo to predict the outcome of future games.
     """)
 
 st.image(
@@ -92,6 +94,6 @@ else:
 st.divider()
 
 st.caption("""
-Built with Python • Streamlit • Maine-yball Analytics
+Founded by Owen Curtice • Built with Python • Streamlit • Maine-yball Analytics
 Covering Maine Class A & B Football
 """)
