@@ -13,7 +13,7 @@ def mpi_chart(df):
         )
         .properties(height=alt.Step(35))
     )
-    st.altair_chart(chart, use_container_width=True)
+    st.altair_chart(chart, width="stretch")
 
 
 def offense_defense_quadrant(df):
@@ -30,4 +30,4 @@ def offense_defense_quadrant(df):
     mid_y = alt.Chart(df).mark_rule(color="gray", strokeDash=[4, 4]).encode(y=alt.datum(0.5))
 
     chart = (mid_x + mid_y + points + labels).properties(height=500)
-    st.altair_chart(chart, use_container_width=True)
+    st.altair_chart(chart, width="stretch")
