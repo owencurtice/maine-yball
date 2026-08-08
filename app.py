@@ -10,7 +10,8 @@ inject_theme()
 st.set_page_config(
     page_title="Maine-yball",
     page_icon="🏈",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
 # --------------------------

@@ -164,3 +164,16 @@ thead tr th {
 tbody {
     color: var(--text-gray);
 }
+/* ---------- Sidebar toggle arrow ---------- */
+
+[data-testid="collapsedControl"] {
+    background-color: var(--accent-green);
+    border-radius: 8px;
+    padding: 4px;
+}
+
+[data-testid="collapsedControl"] svg {
+    fill: var(--bg-dark);
+    width: 28px;
+    height: 28px;
+}
