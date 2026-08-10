@@ -129,7 +129,7 @@ with tab3:
     subtitle = f"Class {class_filter}" if class_filter != "All" else ""
     title = "Preseason Rankings" if not season_started else "Weekly Rankings"
 
-    if st.button("Generate Graphic"):
+    if st.button("Generate Graphic", key="generate_ranking_graphic"):
         img = generate_ranking_graphic(display_rankings, title=title, subtitle=subtitle)
         buf = BytesIO()
         img.save(buf, format="PNG")
