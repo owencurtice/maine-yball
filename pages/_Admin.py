@@ -16,6 +16,7 @@ from utils.graphics import generate_movers_graphic
 from utils.graphics import generate_quote_graphic
 from utils.schedule_strength import compute_schedule_strength
 from utils.graphics import generate_schedule_strength_graphic
+from utils.elo import get_elo_rankings
 
 inject_theme()
 
@@ -29,7 +30,9 @@ games_path = "data/games.csv"
 
 team_options = dict(zip(teams["School"], teams["TeamID"]))
 
-tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["Add Games", "Enter Scores", "Graphics", "Movers Graphic", "Custom Post", "Schedule Strength"])
+tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs(
+    ["Add Games", "Enter Scores", "Graphics", "Movers Graphic", "Custom Post", "Schedule Strength", "Elo Rankings"]
+)
 
 # ------------------------
 # TAB 1: Add Games
@@ -195,3 +198,25 @@ with tab6:
         st.image(img)
         st.download_button("Download for Instagram", data=buf.getvalue(),
                             file_name="maineyball_strength.png", mime="image/png")
+
+with tab7:
+    st.subheader("Elo Rankings Graphic")
+
+    elo_rankings = get_elo_rankings(games, teams)
+    class_filter = st.selectbox("Class", ["All", "A", "B"], key="elo_class")
+
+    display = elo_rankings if class_filter == "All" else elo_rankings[elo_rankings["Class"] == class_filter]
+    display = display.sort_values("Elo", ascending=False).reset_index(drop=True)
+    display["Rank"] = display.index + 1
+
+    st.dataframe(display[["Rank", "Team", "Elo"]], hide_index=True)
+
+    subtitle = f"Class {class_filter}" if class_filter != "All" else ""
+
+    if st.button("Generate Graphic", key="generate_elo_graphic"):
+        img = generate_ranking_graphic(display, title="Elo Rankings", subtitle=subtitle, value_col="Elo", decimals=0)
+        buf = BytesIO()
+        img.save(buf, format="PNG")
+        st.image(img)
+        st.download_button("Download for Instagram", data=buf.getvalue(),
+                            file_name="maineyball_elo.png", mime="image/png", key="download_elo")

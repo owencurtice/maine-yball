@@ -76,3 +76,14 @@ def compute_elo_timeline(games, teams):
 
     predictions = pd.DataFrame(records)
     return elo_entering_week, elo, predictions
+
+def get_elo_rankings(games, teams):
+    _, current_elo, _ = compute_elo_timeline(games, teams)
+
+    rows = [{"TeamID": tid, "Elo": elo} for tid, elo in current_elo.items()]
+    df = pd.DataFrame(rows).merge(teams[["TeamID", "School", "Class"]], on="TeamID")
+    df = df.rename(columns={"School": "Team"})
+    df = df.sort_values("Elo", ascending=False).reset_index(drop=True)
+    df["Rank"] = df.index + 1
+
+    return df
