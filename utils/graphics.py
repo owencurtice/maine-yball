@@ -116,3 +116,33 @@ def generate_quote_graphic(headline, subtext=""):
 
     draw.text((60, H - 60), "MAINE-YBALL.COM", font=footer_font, fill=TEXT_TAUPE)
     return img
+
+def generate_schedule_strength_graphic(df, title="SCHEDULE STRENGTH INDEX", subtitle=""):
+    W, H = 1080, 1080
+    img = Image.new("RGB", (W, H), BG_DARK)
+    draw = ImageDraw.Draw(img)
+
+    title_font = ImageFont.truetype(FONT_HEADLINE, 56)
+    subtitle_font = ImageFont.truetype(FONT_HEADLINE, 28)
+    row_font = ImageFont.truetype(FONT_HEADLINE, 32)
+    score_font = ImageFont.truetype(FONT_MONO, 32)
+    footer_font = ImageFont.truetype(FONT_HEADLINE, 22)
+
+    draw.text((60, 60), "MAINE-YBALL", font=subtitle_font, fill=ACCENT_GREEN)
+    draw.text((60, 100), title.upper(), font=title_font, fill=TEXT_WHITE)
+    if subtitle:
+        draw.text((60, 165), subtitle.upper(), font=subtitle_font, fill=TEXT_TAUPE)
+
+    y = 240
+    row_height = 68
+
+    for _, team in df.head(10).iterrows():
+        draw.text((60, y), f"#{int(team['Rank'])}", font=row_font, fill=ACCENT_GREEN)
+        draw.text((150, y), team["Team"], font=row_font, fill=TEXT_WHITE)
+        score_text = f"{team['AvgOpponentScore']:.1f}"
+        w = draw.textlength(score_text, font=score_font)
+        draw.text((W - 60 - w, y), score_text, font=score_font, fill=TEXT_TAUPE)
+        y += row_height
+
+    draw.text((60, H - 60), "AVG PRESEASON SCORE OF OPPONENTS  •  MAINE-YBALL.COM", font=footer_font, fill=TEXT_TAUPE)
+    return img

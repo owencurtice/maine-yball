@@ -14,6 +14,8 @@ from utils.history import save_snapshot
 from utils.history import get_movers
 from utils.graphics import generate_movers_graphic
 from utils.graphics import generate_quote_graphic
+from utils.schedule_strength import compute_schedule_strength
+from utils.graphics import generate_schedule_strength_graphic
 
 inject_theme()
 
@@ -27,7 +29,7 @@ games_path = "data/games.csv"
 
 team_options = dict(zip(teams["School"], teams["TeamID"]))
 
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["Add Games", "Enter Scores", "Graphics", "Movers Graphic", "Custom Post"])
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["Add Games", "Enter Scores", "Graphics", "Movers Graphic", "Custom Post", "Schedule Strength"])
 
 # ------------------------
 # TAB 1: Add Games
@@ -170,3 +172,26 @@ with tab5:  # add tab5 to your st.tabs(...) list, and import generate_quote_grap
         st.image(img)
         st.download_button("Download for Instagram", data=buf.getvalue(),
                             file_name="maineyball_post.png", mime="image/png")
+
+with tab6:
+    st.subheader("Preseason Schedule Strength Index")
+    st.caption("Ranks teams by the average preseason score of their in-conference opponents. Higher = harder road.")
+
+    strength = compute_schedule_strength(games, teams)
+    class_filter = st.selectbox("Class", ["All", "A", "B"], key="strength_class")
+
+    display = strength if class_filter == "All" else strength[strength["Class"] == class_filter]
+    display = display.sort_values("AvgOpponentScore", ascending=False).reset_index(drop=True)
+    display["Rank"] = display.index + 1
+
+    st.dataframe(display[["Rank", "Team", "AvgOpponentScore", "GamesCounted"]], hide_index=True)
+
+    subtitle = f"Class {class_filter}" if class_filter != "All" else ""
+
+    if st.button("Generate Graphic", key="generate_strength_graphic"):
+        img = generate_schedule_strength_graphic(display, subtitle=subtitle)
+        buf = BytesIO()
+        img.save(buf, format="PNG")
+        st.image(img)
+        st.download_button("Download for Instagram", data=buf.getvalue(),
+                            file_name="maineyball_strength.png", mime="image/png")
