@@ -17,6 +17,7 @@ from utils.graphics import generate_quote_graphic
 from utils.schedule_strength import compute_schedule_strength
 from utils.graphics import generate_schedule_strength_graphic
 from utils.elo import get_elo_rankings
+from utils.db import get_supabase
 
 inject_theme()
 
@@ -26,7 +27,6 @@ require_admin_password()
 
 teams = load_teams()
 games = load_games()
-games_path = "data/games.csv"
 
 team_options = dict(zip(teams["School"], teams["TeamID"]))
 
@@ -64,9 +64,22 @@ with tab1:
                 "HomeScore": "", "AwayScore": "", "IsConference": True
             }])
 
-            games = pd.concat([games, new_row], ignore_index=True)
-            games.to_csv(games_path, index=False)
+            supabase = get_supabase()
+            supabase.table("games").insert({
+                "GameID": game_id,
+                "Week": int(week),
+                "Date": game_date.isoformat(),
+                "HomeID": home_id,
+                "AwayID": away_id,
+                "OpponentName": "",
+                "Division": division,
+                "Status": "Scheduled",
+                "HomeScore": None,
+                "AwayScore": None,
+                "IsConference": True
+            }).execute()
             st.success(f"Added {home_school} vs {away_school} — {game_id}")
+            st.rerun()
 
 # ------------------------
 # TAB 2: Enter / Edit Scores
@@ -139,14 +152,14 @@ with tab2:
 
             if st.button("Save Score", key="save_new_score"):
 
+                supabase = get_supabase()
+                supabase.table("games").update({
+                    "HomeScore": int(home_score),
+                    "AwayScore": int(away_score),
+                    "Status": "Final"
+                }).eq("GameID", selected_id).execute()
+
                 idx = games[games["GameID"] == selected_id].index[0]
-
-                games.at[idx, "HomeScore"] = home_score
-                games.at[idx, "AwayScore"] = away_score
-                games.at[idx, "Status"] = "Final"
-
-                games.to_csv(games_path, index=False)
-
                 week_saved = int(games.at[idx, "Week"])
 
                 updated_rankings, _ = get_rankings(games, teams)
@@ -232,11 +245,12 @@ with tab2:
 
             if st.button("Update Score", key="update_score"):
 
-                games.at[edit_idx, "HomeScore"] = new_home_score
-                games.at[edit_idx, "AwayScore"] = new_away_score
-                games.at[edit_idx, "Status"] = "Final"
-
-                games.to_csv(games_path, index=False)
+                supabase = get_supabase()
+                supabase.table("games").update({
+                    "HomeScore": int(new_home_score),
+                    "AwayScore": int(new_away_score),
+                    "Status": "Final"
+                }).eq("GameID", edit_game_id).execute()
 
                 week_saved = int(games.at[edit_idx, "Week"])
 
