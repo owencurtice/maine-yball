@@ -3,7 +3,7 @@ import streamlit as st
 from utils.theme import inject_theme
 from utils.data import load_games, load_teams
 from utils.rankings import get_rankings
-from utils.components import ranking_card
+from utils.components import ranking_card, mover_card
 from utils.charts import mpi_chart
 from utils.history import get_movers
 from utils.elo import compute_elo_timeline
