@@ -69,7 +69,7 @@ with tab1:
             st.success(f"Added {home_school} vs {away_school} — {game_id}")
 
 # ------------------------
-# TAB 2: Enter Scores
+# TAB 2: Enter / Edit Scores
 # ------------------------
 with tab2:
     st.subheader("Enter Friday Night Scores")
@@ -77,41 +77,178 @@ with tab2:
     if games.empty:
         st.info("No games scheduled yet. Add some in the first tab.")
     else:
+
+        # ========================
+        # ENTER NEW SCORE
+        # ========================
+        st.markdown("### Enter Score")
+
         pending = games[games["Status"] != "Final"]
 
         if pending.empty:
-            st.info("All games have final scores entered.")
+            st.info("All scheduled games have final scores entered.")
         else:
-            week_filter = st.selectbox("Week", sorted(pending["Week"].unique()))
+            week_filter = st.selectbox(
+                "Week",
+                sorted(pending["Week"].unique()),
+                key="score_week"
+            )
+
             week_games = pending[pending["Week"] == week_filter]
 
             id_to_school = dict(zip(teams["TeamID"], teams["School"]))
             id_to_school["OOC"] = "Non-Conference"
 
             labels = {}
+
             for _, row in week_games.iterrows():
-                home_name = row["OpponentName"] if row["HomeID"] == "OOC" else id_to_school[row["HomeID"]]
-                away_name = row["OpponentName"] if row["AwayID"] == "OOC" else id_to_school[row["AwayID"]]
+                home_name = (
+                    row["OpponentName"]
+                    if row["HomeID"] == "OOC"
+                    else id_to_school[row["HomeID"]]
+                )
+
+                away_name = (
+                    row["OpponentName"]
+                    if row["AwayID"] == "OOC"
+                    else id_to_school[row["AwayID"]]
+                )
+
                 labels[row["GameID"]] = f"{home_name} vs {away_name}"
 
             selected_id = st.selectbox(
-                "Game", options=labels.keys(), format_func=lambda gid: labels[gid]
+                "Game",
+                options=labels.keys(),
+                format_func=lambda gid: labels[gid],
+                key="new_score_game"
             )
 
-            home_score = st.number_input("Home Score", min_value=0, step=1)
-            away_score = st.number_input("Away Score", min_value=0, step=1)
+            home_score = st.number_input(
+                "Home Score",
+                min_value=0,
+                step=1,
+                key="new_home_score"
+            )
 
-            if st.button("Save Score"):
+            away_score = st.number_input(
+                "Away Score",
+                min_value=0,
+                step=1,
+                key="new_away_score"
+            )
+
+            if st.button("Save Score", key="save_new_score"):
+
                 idx = games[games["GameID"] == selected_id].index[0]
+
                 games.at[idx, "HomeScore"] = home_score
                 games.at[idx, "AwayScore"] = away_score
                 games.at[idx, "Status"] = "Final"
+
                 games.to_csv(games_path, index=False)
+
                 week_saved = int(games.at[idx, "Week"])
+
                 updated_rankings, _ = get_rankings(games, teams)
                 save_snapshot(week_saved, updated_rankings)
-                st.success(f"Saved: {labels[selected_id]} — {home_score}-{away_score}")
 
+                st.success(
+                    f"Saved: {labels[selected_id]} — "
+                    f"{home_score}-{away_score}"
+                )
+
+                st.rerun()
+
+
+        # ========================
+        # EDIT EXISTING SCORE
+        # ========================
+        st.divider()
+        st.markdown("### Edit Existing Score")
+
+        completed = games[games["Status"] == "Final"].copy()
+
+        if completed.empty:
+            st.info("No final scores have been entered yet.")
+        else:
+
+            id_to_school = dict(zip(teams["TeamID"], teams["School"]))
+            id_to_school["OOC"] = "Non-Conference"
+
+            completed_labels = {}
+
+            for _, row in completed.iterrows():
+
+                home_name = (
+                    row["OpponentName"]
+                    if row["HomeID"] == "OOC"
+                    else id_to_school[row["HomeID"]]
+                )
+
+                away_name = (
+                    row["OpponentName"]
+                    if row["AwayID"] == "OOC"
+                    else id_to_school[row["AwayID"]]
+                )
+
+                completed_labels[row["GameID"]] = (
+                    f"Week {int(row['Week'])}: "
+                    f"{home_name} {int(row['HomeScore'])}-"
+                    f"{int(row['AwayScore'])} {away_name}"
+                )
+
+            edit_game_id = st.selectbox(
+                "Select game to edit",
+                options=completed_labels.keys(),
+                format_func=lambda gid: completed_labels[gid],
+                key="edit_game"
+            )
+
+            edit_idx = games[games["GameID"] == edit_game_id].index[0]
+            edit_game = games.loc[edit_idx]
+
+            current_home = int(edit_game["HomeScore"])
+            current_away = int(edit_game["AwayScore"])
+
+            col1, col2 = st.columns(2)
+
+            with col1:
+                new_home_score = st.number_input(
+                    "Home Score",
+                    min_value=0,
+                    value=current_home,
+                    step=1,
+                    key="edit_home_score"
+                )
+
+            with col2:
+                new_away_score = st.number_input(
+                    "Away Score",
+                    min_value=0,
+                    value=current_away,
+                    step=1,
+                    key="edit_away_score"
+                )
+
+            if st.button("Update Score", key="update_score"):
+
+                games.at[edit_idx, "HomeScore"] = new_home_score
+                games.at[edit_idx, "AwayScore"] = new_away_score
+                games.at[edit_idx, "Status"] = "Final"
+
+                games.to_csv(games_path, index=False)
+
+                week_saved = int(games.at[edit_idx, "Week"])
+
+                updated_rankings, _ = get_rankings(games, teams)
+                save_snapshot(week_saved, updated_rankings)
+
+                st.success(
+                    f"Updated score to "
+                    f"{new_home_score}-{new_away_score}"
+                )
+
+                st.rerun()
 # ------------------------
 # TAB 3: Graphics
 # ------------------------
