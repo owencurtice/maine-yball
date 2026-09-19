@@ -43,7 +43,7 @@ GameID,Week,Date,HomeID,AwayID,OpponentName,Division,Status,HomeScore,AwayScore,
 2026-W03-013,3,2026-09-18,POR,WIN,,A North,Scheduled,,,True
 2026-W03-014,3,2026-09-18,SCA,SOP,,A South,Scheduled,,,True
 2026-W03-015,3,2026-09-18,SKO,LAW,,B North,Scheduled,,,True
-2026-W03-016,3,2026-09-18,THO,OOC,Pinkerton Academy (NH),A South,Scheduled,,,False
+2026-W03-016,3,2026-09-18,THO,OOC,Bedford (NH),A South,Scheduled,,,False
 2026-W04-001,4,2026-09-25,BAN,WIN,,A North,Scheduled,,,True
 2026-W04-002,4,2026-09-25,BON,SCA,,A South,Scheduled,,,True
 2026-W04-003,4,2026-09-25,CON,MES,,B North,Scheduled,,,True
