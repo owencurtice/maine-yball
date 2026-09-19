@@ -30,8 +30,18 @@ games = load_games()
 
 team_options = dict(zip(teams["School"], teams["TeamID"]))
 
-tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs(
-    ["Add Games", "Enter Scores", "Graphics", "Movers Graphic", "Custom Post", "Schedule Strength", "Elo Rankings"]
+tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = st.tabs(
+    [
+        "Add Games",
+        "Enter Scores",
+        "Edit Schedule",
+        "Graphics",
+        "Movers Graphic",
+        "Custom Post",
+        "Schedule Strength",
+        "Elo Rankings"
+    ]
+)
 )
 
 # ------------------------
@@ -263,10 +273,173 @@ with tab2:
                 )
 
                 st.rerun()
+
+# ------------------------
+# TAB 3: Edit Schedule
+# ------------------------
+with tab3:
+    st.subheader("Edit Schedule")
+
+    if games.empty:
+        st.info("No games scheduled.")
+    else:
+        id_to_school = dict(zip(teams["TeamID"], teams["School"]))
+        id_to_school["OOC"] = "Non-Conference"
+
+        schedule_labels = {}
+
+        for _, row in games.iterrows():
+            home_name = (
+                row["OpponentName"]
+                if row["HomeID"] == "OOC"
+                else id_to_school.get(row["HomeID"], row["HomeID"])
+            )
+
+            away_name = (
+                row["OpponentName"]
+                if row["AwayID"] == "OOC"
+                else id_to_school.get(row["AwayID"], row["AwayID"])
+            )
+
+            schedule_labels[row["GameID"]] = (
+                f"Week {int(row['Week'])}: "
+                f"{home_name} vs {away_name} "
+                f"({row['Date']})"
+            )
+
+        selected_game_id = st.selectbox(
+            "Select game",
+            options=schedule_labels.keys(),
+            format_func=lambda gid: schedule_labels[gid],
+            key="schedule_edit_game"
+        )
+
+        selected_idx = games[games["GameID"] == selected_game_id].index[0]
+        selected_game = games.loc[selected_idx]
+
+        st.divider()
+
+        st.markdown("### Change Game")
+
+        home_options = list(team_options.keys())
+        away_options = list(team_options.keys())
+
+        current_home_school = id_to_school.get(
+            selected_game["HomeID"],
+            selected_game["HomeID"]
+        )
+
+        current_away_school = id_to_school.get(
+            selected_game["AwayID"],
+            selected_game["AwayID"]
+        )
+
+        new_home_school = st.selectbox(
+            "Home Team",
+            home_options,
+            index=(
+                home_options.index(current_home_school)
+                if current_home_school in home_options
+                else 0
+            ),
+            key="schedule_new_home"
+        )
+
+        new_away_school = st.selectbox(
+            "Away Team",
+            away_options,
+            index=(
+                away_options.index(current_away_school)
+                if current_away_school in away_options
+                else 0
+            ),
+            key="schedule_new_away"
+        )
+
+        new_date = st.date_input(
+            "Date",
+            value=pd.to_datetime(selected_game["Date"]).date(),
+            key="schedule_new_date"
+        )
+
+        new_week = st.number_input(
+            "Week",
+            min_value=1,
+            max_value=15,
+            value=int(selected_game["Week"]),
+            step=1,
+            key="schedule_new_week"
+        )
+
+        if st.button("Save Schedule Change", key="save_schedule_change"):
+
+            new_home_id = team_options[new_home_school]
+            new_away_id = team_options[new_away_school]
+
+            if new_home_id == new_away_id:
+                st.error("Home and away teams can't be the same.")
+            else:
+                new_division = teams.loc[
+                    teams["TeamID"] == new_home_id,
+                    "Division"
+                ].values[0]
+
+                supabase = get_supabase()
+
+                supabase.table("games").update({
+                    "Week": int(new_week),
+                    "Date": new_date.isoformat(),
+                    "HomeID": new_home_id,
+                    "AwayID": new_away_id,
+                    "Division": new_division
+                }).eq(
+                    "GameID",
+                    selected_game_id
+                ).execute()
+
+                st.success(
+                    f"Updated schedule: "
+                    f"{new_home_school} vs {new_away_school}"
+                )
+
+                st.rerun()
+
+        st.divider()
+
+        st.markdown("### Delete Game")
+
+        st.warning(
+            "Deleting a game permanently removes it from the Supabase schedule."
+        )
+
+        confirm_delete = st.checkbox(
+            "I understand that this will permanently delete the selected game.",
+            key="confirm_delete_game"
+        )
+
+        if st.button(
+            "Delete Game",
+            key="delete_schedule_game",
+            disabled=not confirm_delete
+        ):
+            supabase = get_supabase()
+
+            supabase.table("games").delete().eq(
+                "GameID",
+                selected_game_id
+            ).execute()
+
+            st.success(
+                f"Deleted {schedule_labels[selected_game_id]}"
+            )
+
+            st.rerun()
+
+        
 # ------------------------
 # TAB 3: Graphics
 # ------------------------
-with tab3:
+with tab4:
     st.subheader("Generate Weekly Graphic")
 
     rankings, season_started = get_rankings(games, teams)
@@ -293,7 +466,7 @@ with tab3:
             file_name="maineyball_rankings.png", mime="image/png"
         )
 
-with tab4:
+with tab5:
     st.subheader("Generate Movers Graphic")
 
     movers = get_movers(games, teams)
@@ -314,7 +487,7 @@ with tab4:
                 file_name="maineyball_movers.png", mime="image/png"
             )
 
-with tab5:  # add tab5 to your st.tabs(...) list, and import generate_quote_graphic
+with tab6:  # add tab5 to your st.tabs(...) list, and import generate_quote_graphic
     st.subheader("Custom Text Graphic")
     headline = st.text_area("Headline", max_chars=100)
     subtext = st.text_area("Subtext (optional)", max_chars=250)
@@ -327,7 +500,7 @@ with tab5:  # add tab5 to your st.tabs(...) list, and import generate_quote_grap
         st.download_button("Download for Instagram", data=buf.getvalue(),
                             file_name="maineyball_post.png", mime="image/png")
 
-with tab6:
+with tab7:
     st.subheader("Preseason Schedule Strength Index")
     st.caption("Ranks teams by the average preseason score of their in-conference opponents. Higher = harder road.")
 
@@ -350,7 +523,7 @@ with tab6:
         st.download_button("Download for Instagram", data=buf.getvalue(),
                             file_name="maineyball_strength.png", mime="image/png")
 
-with tab7:
+with tab8:
     st.subheader("Elo Rankings Graphic")
 
     elo_rankings = get_elo_rankings(games, teams)
