@@ -17,11 +17,10 @@
 
 /* ---------- Base ---------- */
 
-html, body, [class*="css"], [data-testid="stAppViewContainer"] {
+html, body, [data-testid="stAppViewContainer"] {
     background-color: var(--bg-dark);
     font-family: 'Inter', sans-serif;
 }
-
 /* ---------- Typography ---------- */
 
 h1 {
@@ -65,19 +64,44 @@ p {
     text-transform: uppercase;
     font-size: 15px !important;
 }
+/* ---------- Force Maine-yball text colors ---------- */
+
+h1,
+h2 {
+    color: var(--text-white) !important;
+}
+
+h3 {
+    color: var(--accent-green) !important;
+}
+
+p {
+    color: var(--text-gray) !important;
+}
 
 /* ---------- Sidebar ---------- */
 
 section[data-testid="stSidebar"] {
-    background: #16211F;
+    background: #16211F !important;
     border-right: 1px solid rgba(255,255,255,.08);
 }
 
-section[data-testid="stSidebar"] * {
-    color: var(--text-white);
+section[data-testid="stSidebar"] p,
+section[data-testid="stSidebar"] label,
+section[data-testid="stSidebar"] [data-testid="stMarkdownContainer"],
+section[data-testid="stSidebar"] [data-testid="stWidgetLabel"],
+section[data-testid="stSidebar"] [data-testid="stRadio"],
+section[data-testid="stSidebar"] [data-testid="stSelectbox"] {
+    color: var(--text-white) !important;
     font-family: 'Inter', sans-serif;
 }
 
+/* Keep Streamlit icons working */
+section[data-testid="stSidebar"] [data-testid="stIconMaterial"],
+section[data-testid="stSidebar"] .material-symbols-rounded,
+section[data-testid="stSidebar"] .material-symbols-outlined {
+    font-family: 'Material Symbols Rounded' !important;
+}
 /* ---------- Cards ---------- */
 
 .card {
@@ -172,8 +196,38 @@ tbody {
     padding: 4px;
 }
 
-[data-testid="collapsedControl"] svg {
-    fill: var(--bg-dark);
-    width: 28px;
-    height: 28px;
+[data-testid="collapsedControl"] button {
+    color: var(--bg-dark) !important;
+}
+
+[data-testid="collapsedControl"] [data-testid="stIconMaterial"] {
+    font-family: 'Material Symbols Rounded' !important;
+    color: var(--bg-dark) !important;
+    font-size: 28px !important;
+}
+/* ---------- Streamlit widget text ---------- */
+
+[data-testid="stSelectbox"] label,
+[data-testid="stNumberInput"] label,
+[data-testid="stDateInput"] label,
+[data-testid="stTextInput"] label,
+[data-testid="stTextArea"] label,
+[data-testid="stCheckbox"] label,
+[data-testid="stRadio"] label,
+[data-testid="stSlider"] label {
+    color: var(--text-white) !important;
+}
+
+[data-baseweb="select"] *,
+[data-baseweb="input"] *,
+[data-baseweb="textarea"] * {
+    color: var(--text-white) !important;
+}
+html,
+body,
+[data-testid="stAppViewContainer"],
+[data-testid="stHeader"],
+[data-testid="stMain"],
+[data-testid="stSidebar"] {
+    background-color: var(--bg-dark) !important;
 }
